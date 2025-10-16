@@ -14,19 +14,23 @@ interface ServicePanelProps {
 const statusConfig = {
   healthy: {
     label: "Operational",
-    className: "text-green-500 border-green-500/20 bg-green-500/5",
+    badge: "g-badge g-badge-healthy",
+    bar: "from-green-500/60 to-green-500/10",
   },
   degraded: {
     label: "Degraded",
-    className: "text-yellow-500 border-yellow-500/20 bg-yellow-500/5",
+    badge: "g-badge g-badge-degraded",
+    bar: "from-yellow-500/60 to-yellow-500/10",
   },
   critical: {
     label: "Critical",
-    className: "text-red-500 border-red-500/20 bg-red-500/5",
+    badge: "g-badge g-badge-critical",
+    bar: "from-red-500/60 to-red-500/10",
   },
   unknown: {
     label: "Unknown",
-    className: "text-muted-foreground border-muted/20 bg-muted/5",
+    badge: "g-badge g-badge-unknown",
+    bar: "from-muted-foreground/60 to-muted-foreground/10",
   },
 };
 
@@ -40,25 +44,21 @@ export const ServicePanel = ({
   const config = statusConfig[status];
 
   return (
-    <Card
-      className={cn(
-        "relative overflow-hidden border transition-all duration-300 hover:scale-[1.02] hover:shadow-lg",
-        config.className
-      )}
-    >
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
+    <Card className={cn("relative overflow-hidden g-panel g-panel-hover")}>
+      <div className={cn("absolute top-0 inset-x-0 h-1 bg-gradient-to-r", config.bar)} />
+      <div className="p-5">
+        <div className="flex items-start justify-between mb-3">
           <div className="space-y-1">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
               {category}
             </p>
-            <h3 className="font-semibold text-lg text-card-foreground">{name}</h3>
+            <h3 className="font-semibold text-base text-card-foreground">{name}</h3>
           </div>
-          <div className="text-5xl animate-pulse">{emoji}</div>
+          <div className="text-4xl select-none">{emoji}</div>
         </div>
 
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
-          <span className="text-sm font-medium">{config.label}</span>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/60">
+          <span className={cn(config.badge)}>{config.label}</span>
           <span className="text-xs text-muted-foreground">{lastCheck}</span>
         </div>
       </div>
