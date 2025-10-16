@@ -19,7 +19,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
   const getBackgroundGradient = () => {
     switch (weather) {
       case "sunny":
-        return "linear-gradient(to bottom, #87CEEB 0%, #FFD700 50%, #FFA500 70%, #F4A460 100%)";
+        return "linear-gradient(to bottom, #87CEEB 0%, #B0E5FC 40%, #FFE5B4 75%, #F5DEB3 100%)";
       case "partly-cloudy":
         return "linear-gradient(to bottom, #87CEEB 0%, #B0C4DE 50%, #87CEEB 100%)";
       case "cloudy":
@@ -46,7 +46,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       {/* Lightning flash disabled */}
 
       {/* Clouds (no clouds in fire mode) */}
-      {(weather === "partly-cloudy" || weather === "cloudy" || weather === "rainy") && (
+      {(weather === "sunny" || weather === "partly-cloudy" || weather === "cloudy" || weather === "rainy") && (
         <>
           <div className="cloud cloud-1" />
           <div className="cloud cloud-2" />
@@ -129,8 +129,8 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       {/* Sun */}
       {weather === "sunny" && (
         <div className="absolute top-20 right-20 w-32 h-32">
-          <div className="absolute inset-0 rounded-full bg-yellow-300" />
-          <div className="absolute inset-0 rounded-full bg-yellow-200 opacity-60 blur-xl" />
+          <div className="absolute inset-0 rounded-full bg-yellow-300 opacity-90" />
+          <div className="absolute inset-0 rounded-full bg-yellow-200 opacity-40 blur-2xl scale-150" />
         </div>
       )}
 
@@ -298,9 +298,9 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
           left: 0;
           right: 0;
           height: 100px;
-          background: rgba(135, 206, 250, 0.3);
+          background: rgba(100, 180, 200, 0.25);
           border-radius: 50% 50% 0 0;
-          animation: wave 8s ease-in-out infinite;
+          animation: wave 12s ease-in-out infinite;
         }
 
         .wave-1 {
@@ -309,14 +309,14 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
         }
 
         .wave-2 {
-          animation-delay: -2s;
+          animation-delay: -4s;
           opacity: 0.2;
           height: 120px;
         }
 
         .wave-3 {
-          animation-delay: -4s;
-          opacity: 0.1;
+          animation-delay: -8s;
+          opacity: 0.15;
           height: 140px;
         }
 
@@ -325,7 +325,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
             transform: translateX(0) scaleY(1);
           }
           50% {
-            transform: translateX(-25%) scaleY(1.2);
+            transform: translateX(-15%) scaleY(1.1);
           }
         }
 
