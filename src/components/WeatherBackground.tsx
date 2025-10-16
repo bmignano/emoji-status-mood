@@ -143,6 +143,17 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
         </>
       )}
 
+      {/* Contrast overlay to improve text legibility on sunny theme */}
+      {weather === "sunny" && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0.36) 0%, rgba(0,0,0,0.28) 35%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.0) 75%)",
+          }}
+        />
+      )}
+
       <style>{`
         .cloud {
           position: absolute;

@@ -65,7 +65,7 @@ const Index = () => {
     { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy", image: "/Frame 64781.png" },
     { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy", image: "/Frame 64780.png" },
     { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy", image: "/Frame 64784.png" },
-    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny", image: "/Frame 64782.png" },
+    { emoji: "😊", label: "Everything's Great!", color: "text-green-700", weather: "sunny", image: "/Frame 64782.png" },
   ];
 
   const overallMood = moodOptions[mood[0]];
