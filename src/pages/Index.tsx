@@ -139,7 +139,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center">
           <ChevronDown className="h-8 w-8 text-muted-foreground" />
           <p className="text-xs text-muted-foreground mt-2">Scroll for details</p>
         </div>
