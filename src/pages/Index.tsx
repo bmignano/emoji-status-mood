@@ -1,4 +1,5 @@
 import { ServicePanel } from "@/components/ServicePanel";
+import { WeatherBackground } from "@/components/WeatherBackground";
 import { Activity, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -51,25 +52,53 @@ const Index = () => {
     unknown: services.filter((s) => s.status === "unknown").length,
   };
 
-  // Calculate overall mood
+  // Calculate overall mood and weather
   const getOverallMood = () => {
     const total = services.length;
     const healthyPercentage = (statusCounts.healthy / total) * 100;
     const criticalCount = statusCounts.critical;
+    const degradedCount = statusCounts.degraded;
 
-    if (criticalCount > 0) return { emoji: "😰", label: "Under Stress", color: "text-red-500" };
-    if (healthyPercentage >= 90) return { emoji: "😊", label: "Everything's Great!", color: "text-green-500" };
-    if (healthyPercentage >= 70) return { emoji: "🙂", label: "Mostly Good", color: "text-green-400" };
-    if (healthyPercentage >= 50) return { emoji: "😐", label: "Could Be Better", color: "text-yellow-500" };
-    return { emoji: "😢", label: "Need Attention", color: "text-red-500" };
+    if (criticalCount > 0) return { 
+      emoji: "😰", 
+      label: "Under Stress", 
+      color: "text-red-500",
+      weather: "thunderstorm" as const
+    };
+    if (healthyPercentage >= 90) return { 
+      emoji: "😊", 
+      label: "Everything's Great!", 
+      color: "text-green-500",
+      weather: "sunny" as const
+    };
+    if (healthyPercentage >= 70) return { 
+      emoji: "🙂", 
+      label: "Mostly Good", 
+      color: "text-green-400",
+      weather: "partly-cloudy" as const
+    };
+    if (healthyPercentage >= 50 || degradedCount > 0) return { 
+      emoji: "😐", 
+      label: "Could Be Better", 
+      color: "text-yellow-500",
+      weather: "cloudy" as const
+    };
+    return { 
+      emoji: "😢", 
+      label: "Need Attention", 
+      color: "text-red-500",
+      weather: "rainy" as const
+    };
   };
 
   const overallMood = getOverallMood();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative">
+      <WeatherBackground weather={overallMood.weather} />
+      
       {/* Hero Section with Overall Mood */}
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 relative">
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10">
         <div className="text-center space-y-8 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Activity className="h-8 w-8 text-primary" />
@@ -118,10 +147,11 @@ const Index = () => {
 
       {/* Dashboard Grid - Shows on Scroll */}
       <div 
-        className={`p-6 pb-24 transition-all duration-500 ${
+        className={`p-6 pb-24 transition-all duration-500 relative z-10 ${
           showDashboard ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
+        <div className="absolute inset-0 bg-background/60 backdrop-blur-sm -z-10" />
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-foreground mb-6">Service Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
