@@ -2,9 +2,12 @@ import { ServicePanel } from "@/components/ServicePanel";
 import { WeatherBackground } from "@/components/WeatherBackground";
 import { Activity, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const [showDashboard, setShowDashboard] = useState(false);
+  const [weatherEnabled, setWeatherEnabled] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,7 +98,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
-      <WeatherBackground weather={overallMood.weather} />
+      {weatherEnabled && <WeatherBackground weather={overallMood.weather} />}
+      
+      {/* Weather Toggle */}
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-card/80 backdrop-blur-sm border border-border rounded-lg px-4 py-3 shadow-lg">
+        <Label htmlFor="weather-toggle" className="text-sm font-medium cursor-pointer">
+          Weather Effects
+        </Label>
+        <Switch 
+          id="weather-toggle"
+          checked={weatherEnabled} 
+          onCheckedChange={setWeatherEnabled}
+        />
+      </div>
       
       {/* Hero Section with Overall Mood */}
       <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10">
@@ -151,6 +166,7 @@ const Index = () => {
           showDashboard ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
+        {!weatherEnabled && <div className="absolute inset-0 bg-background -z-10" />}
         <div className="absolute inset-0 bg-background/60 backdrop-blur-sm -z-10" />
         <div className="max-w-7xl mx-auto">
           <h2 className="text-2xl font-bold text-foreground mb-6">Service Details</h2>
