@@ -27,7 +27,8 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       case "rainy":
         return "linear-gradient(to bottom, #2C3E50 0%, #34495E 50%, #2C3E50 100%)";
       case "thunderstorm":
-        return "linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%)";
+        // Everything-is-on-fire theme: smoky sky fading to intense orange glow
+        return "linear-gradient(to bottom, #0b0b0c 0%, #1a1411 45%, #2b1a10 70%, #3a1e0a 85%, #4a2106 100%)";
       default:
         return "linear-gradient(to bottom, #87CEEB 0%, #87CEEB 100%)";
     }
@@ -44,8 +45,8 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       {/* Lightning flash */}
       {/* Lightning flash disabled */}
 
-      {/* Clouds */}
-      {(weather === "partly-cloudy" || weather === "cloudy" || weather === "rainy" || weather === "thunderstorm") && (
+      {/* Clouds (no clouds in fire mode) */}
+      {(weather === "partly-cloudy" || weather === "cloudy" || weather === "rainy") && (
         <>
           <div className="cloud cloud-1" />
           <div className="cloud cloud-2" />
@@ -55,7 +56,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       )}
 
       {/* Rain */}
-      {(weather === "rainy" || weather === "thunderstorm") && (
+      {weather === "rainy" && (
         <div className="rain-container">
           {Array.from({ length: 100 }).map((_, i) => (
             <div
@@ -69,6 +70,60 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
             />
           ))}
         </div>
+      )}
+
+      {/* Fire: flames, embers, and smoke for thunderstorm */}
+      {weather === "thunderstorm" && (
+        <>
+          {/* Orange glow overlay */}
+          <div className="fire-glow" />
+
+          {/* Flames at the bottom */}
+          <div className="fire-container">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <div
+                key={i}
+                className="flame"
+                style={{
+                  left: `${(i / 18) * 100}%`,
+                  animationDelay: `${(Math.random() * 2).toFixed(2)}s`,
+                  transform: `scale(${(0.6 + Math.random() * 0.9).toFixed(2)})`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Embers floating up */}
+          <div className="embers-container">
+            {Array.from({ length: 120 }).map((_, i) => (
+              <div
+                key={i}
+                className="ember"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${(Math.random() * 4).toFixed(2)}s`,
+                  animationDuration: `${(3 + Math.random() * 5).toFixed(2)}s`,
+                  opacity: `${(0.4 + Math.random() * 0.6).toFixed(2)}`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Slow moving smoke plumes */}
+          <div className="smoke-container">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="smoke"
+                style={{
+                  left: `${10 + i * 15 + Math.random() * 5}%`,
+                  animationDelay: `${(i * 1.5).toFixed(2)}s`,
+                  animationDuration: `${(12 + Math.random() * 6).toFixed(2)}s`,
+                }}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       {/* Sun */}
@@ -91,7 +146,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       <style>{`
         .cloud {
           position: absolute;
-          background: rgba(255, 255, 255, ${weather === "thunderstorm" ? "0.1" : "0.8"});
+          background: rgba(255, 255, 255, 0.8);
           border-radius: 100px;
           animation: float 20s infinite ease-in-out;
         }
@@ -100,7 +155,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
         .cloud::after {
           content: "";
           position: absolute;
-          background: rgba(255, 255, 255, ${weather === "thunderstorm" ? "0.1" : "0.8"});
+          background: rgba(255, 255, 255, 0.8);
           border-radius: 100px;
         }
 
@@ -261,6 +316,94 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
           50% {
             transform: translateX(-25%) scaleY(1.2);
           }
+        }
+
+        /* Fire theme styles */
+        .fire-glow {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 50% 90%, rgba(255, 140, 0, 0.35), rgba(0,0,0,0) 50%),
+                      radial-gradient(circle at 20% 95%, rgba(255, 80, 0, 0.25), rgba(0,0,0,0) 40%),
+                      radial-gradient(circle at 80% 95%, rgba(255, 60, 0, 0.25), rgba(0,0,0,0) 40%);
+          pointer-events: none;
+          mix-blend-mode: screen;
+        }
+
+        .fire-container {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 28vh;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .flame {
+          position: absolute;
+          bottom: -4vh;
+          width: 70px;
+          height: 140px;
+          background: radial-gradient(ellipse at center, rgba(255, 220, 150, 0.95) 0%, rgba(255, 165, 0, 0.95) 35%, rgba(255, 80, 0, 0.9) 60%, rgba(255, 60, 0, 0.0) 70%);
+          filter: blur(1px) saturate(120%);
+          border-bottom-left-radius: 50% 60%;
+          border-bottom-right-radius: 50% 60%;
+          transform-origin: bottom center;
+          animation: flicker 1.5s infinite ease-in-out;
+          mix-blend-mode: screen;
+        }
+
+        @keyframes flicker {
+          0%   { transform: translateY(0) scaleY(0.95) skewX(0deg); opacity: 0.85; }
+          50%  { transform: translateY(-10px) scaleY(1.1) skewX(2deg); opacity: 1; }
+          100% { transform: translateY(0) scaleY(0.95) skewX(-1deg); opacity: 0.9; }
+        }
+
+        .embers-container {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .ember {
+          position: absolute;
+          bottom: 0;
+          width: 3px;
+          height: 3px;
+          background: radial-gradient(circle, rgba(255,200,120,1) 0%, rgba(255,120,40,0.9) 40%, rgba(255,120,40,0.0) 70%);
+          border-radius: 50%;
+          filter: blur(0.5px);
+          animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+          0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0.8; }
+          50%  { transform: translateY(-60vh) translateX(-10px) scale(1.2); opacity: 0.6; }
+          100% { transform: translateY(-120vh) translateX(5px) scale(0.8); opacity: 0; }
+        }
+
+        .smoke-container {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .smoke {
+          position: absolute;
+          bottom: 0;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(ellipse at center, rgba(80,80,80,0.35) 0%, rgba(60,60,60,0.25) 40%, rgba(40,40,40,0.0) 70%);
+          border-radius: 50%;
+          filter: blur(8px);
+          animation: driftUp linear infinite;
+          opacity: 0.6;
+        }
+
+        @keyframes driftUp {
+          0%   { transform: translateY(0) translateX(0) scale(0.8); opacity: 0.4; }
+          50%  { transform: translateY(-30vh) translateX(30px) scale(1); opacity: 0.35; }
+          100% { transform: translateY(-60vh) translateX(-20px) scale(1.1); opacity: 0.25; }
         }
       `}</style>
     </div>
