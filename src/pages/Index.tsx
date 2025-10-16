@@ -61,11 +61,11 @@ const Index = () => {
   type DemoWeather = "sunny" | "partly-cloudy" | "cloudy" | "rainy" | "thunderstorm";
   type MoodOption = { emoji: string; label: string; color: string; weather: DemoWeather; image?: string };
   const moodOptions: MoodOption[] = [
-    { emoji: "😰", label: "Under Stress", color: "text-red-500", weather: "thunderstorm" },
-    { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy" },
-    { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy" },
-    { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy" },
-    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny", image: "/grot1.jpeg" },
+    { emoji: "😰", label: "Under Stress", color: "text-red-500", weather: "thunderstorm", image: "/Frame 64783.png" },
+    { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy", image: "/Frame 64781.png" },
+    { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy", image: "/Frame 64780.png" },
+    { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy", image: "/Frame 64784.png" },
+    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny", image: "/Frame 64782.png" },
   ];
 
   const overallMood = moodOptions[mood[0]];
@@ -112,12 +112,12 @@ const Index = () => {
           </div>
           
           <div className="space-y-4">
-            <div className="leading-none animate-pulse flex items-center justify-center">
+            <div className="leading-none flex items-center justify-center">
               {overallMood.image ? (
                 <img
                   src={overallMood.image}
                   alt={overallMood.label}
-                  className="w-[180px] h-[180px] object-contain select-none"
+                  className="w-[180px] h-[180px] object-contain select-none mix-blend-multiply bg-transparent"
                   draggable={false}
                 />
               ) : (

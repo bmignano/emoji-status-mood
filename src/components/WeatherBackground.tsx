@@ -10,13 +10,9 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
   const [lightning, setLightning] = useState(false);
 
   useEffect(() => {
+    // Disable lightning flashes to prevent background flashing
     if (weather === "thunderstorm") {
-      const lightningInterval = setInterval(() => {
-        setLightning(true);
-        setTimeout(() => setLightning(false), 200);
-      }, Math.random() * 3000 + 2000);
-
-      return () => clearInterval(lightningInterval);
+      setLightning(false);
     }
   }, [weather]);
 
@@ -46,9 +42,7 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       />
 
       {/* Lightning flash */}
-      {weather === "thunderstorm" && lightning && (
-        <div className="absolute inset-0 bg-white animate-pulse" style={{ animationDuration: "0.1s" }} />
-      )}
+      {/* Lightning flash disabled */}
 
       {/* Clouds */}
       {(weather === "partly-cloudy" || weather === "cloudy" || weather === "rainy" || weather === "thunderstorm") && (
@@ -80,8 +74,8 @@ export const WeatherBackground = ({ weather }: WeatherBackgroundProps) => {
       {/* Sun */}
       {weather === "sunny" && (
         <div className="absolute top-20 right-20 w-32 h-32">
-          <div className="absolute inset-0 rounded-full bg-yellow-300 animate-pulse" />
-          <div className="absolute inset-0 rounded-full bg-yellow-200 opacity-60 blur-xl animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-yellow-300" />
+          <div className="absolute inset-0 rounded-full bg-yellow-200 opacity-60 blur-xl" />
         </div>
       )}
 
