@@ -58,12 +58,14 @@ const Index = () => {
   };
 
   // Demo mood options controlled by the slider (0..4)
-  const moodOptions = [
-    { emoji: "😰", label: "Under Stress", color: "text-red-500", weather: "thunderstorm" as const },
-    { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy" as const },
-    { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy" as const },
-    { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy" as const },
-    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny" as const },
+  type DemoWeather = "sunny" | "partly-cloudy" | "cloudy" | "rainy" | "thunderstorm";
+  type MoodOption = { emoji: string; label: string; color: string; weather: DemoWeather; image?: string };
+  const moodOptions: MoodOption[] = [
+    { emoji: "😰", label: "Under Stress", color: "text-red-500", weather: "thunderstorm" },
+    { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy" },
+    { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy" },
+    { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy" },
+    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny", image: "/grot1.jpeg" },
   ];
 
   const overallMood = moodOptions[mood[0]];
@@ -110,8 +112,17 @@ const Index = () => {
           </div>
           
           <div className="space-y-4">
-            <div className="text-[180px] leading-none animate-pulse">
-              {overallMood.emoji}
+            <div className="leading-none animate-pulse flex items-center justify-center">
+              {overallMood.image ? (
+                <img
+                  src={overallMood.image}
+                  alt={overallMood.label}
+                  className="w-[180px] h-[180px] object-contain select-none"
+                  draggable={false}
+                />
+              ) : (
+                <span className="text-[180px]">{overallMood.emoji}</span>
+              )}
             </div>
             <p className={`text-4xl font-bold ${overallMood.color}`}>
               {overallMood.label}
