@@ -4,10 +4,12 @@ import { Activity, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 const Index = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const [weatherEnabled, setWeatherEnabled] = useState(true);
+  const [mood, setMood] = useState<number[]>([0]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,51 +57,38 @@ const Index = () => {
     unknown: services.filter((s) => s.status === "unknown").length,
   };
 
-  // Calculate overall mood and weather
-  const getOverallMood = () => {
-    const total = services.length;
-    const healthyPercentage = (statusCounts.healthy / total) * 100;
-    const criticalCount = statusCounts.critical;
-    const degradedCount = statusCounts.degraded;
+  // Demo mood options controlled by the slider (0..4)
+  const moodOptions = [
+    { emoji: "😰", label: "Under Stress", color: "text-red-500", weather: "thunderstorm" as const },
+    { emoji: "😢", label: "Need Attention", color: "text-red-500", weather: "rainy" as const },
+    { emoji: "😐", label: "Could Be Better", color: "text-yellow-500", weather: "cloudy" as const },
+    { emoji: "🙂", label: "Mostly Good", color: "text-green-400", weather: "partly-cloudy" as const },
+    { emoji: "😊", label: "Everything's Great!", color: "text-green-500", weather: "sunny" as const },
+  ];
 
-    if (criticalCount > 0) return { 
-      emoji: "😰", 
-      label: "Under Stress", 
-      color: "text-red-500",
-      weather: "thunderstorm" as const
-    };
-    if (healthyPercentage >= 90) return { 
-      emoji: "😊", 
-      label: "Everything's Great!", 
-      color: "text-green-500",
-      weather: "sunny" as const
-    };
-    if (healthyPercentage >= 70) return { 
-      emoji: "🙂", 
-      label: "Mostly Good", 
-      color: "text-green-400",
-      weather: "partly-cloudy" as const
-    };
-    if (healthyPercentage >= 50 || degradedCount > 0) return { 
-      emoji: "😐", 
-      label: "Could Be Better", 
-      color: "text-yellow-500",
-      weather: "cloudy" as const
-    };
-    return { 
-      emoji: "😢", 
-      label: "Need Attention", 
-      color: "text-red-500",
-      weather: "rainy" as const
-    };
-  };
-
-  const overallMood = getOverallMood();
+  const overallMood = moodOptions[mood[0]];
 
   return (
     <div className="min-h-screen relative">
       {weatherEnabled && <WeatherBackground weather={overallMood.weather} />}
       
+      {/* Mood Slider */}
+      <div className="fixed top-6 left-6 z-50 bg-card/80 backdrop-blur-sm border border-border rounded-lg px-4 py-3 shadow-lg w-[320px]">
+        <div className="flex items-center justify-between mb-2">
+          <Label htmlFor="mood-slider" className="text-sm font-medium cursor-pointer">System Mood</Label>
+          <div className="text-xs text-muted-foreground flex items-center gap-1">
+            <span>⛈️</span>
+            <span>→</span>
+            <span>☀️</span>
+          </div>
+        </div>
+        <Slider id="mood-slider" min={0} max={4} step={1} value={mood} onValueChange={setMood} />
+        <div className="mt-2 text-xs text-muted-foreground text-center">
+          <span className="mr-1">{overallMood.emoji}</span>
+          <span className="font-medium">{overallMood.label}</span>
+        </div>
+      </div>
+
       {/* Weather Toggle */}
       <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-card/80 backdrop-blur-sm border border-border rounded-lg px-4 py-3 shadow-lg">
         <Label htmlFor="weather-toggle" className="text-sm font-medium cursor-pointer">
